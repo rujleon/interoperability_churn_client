@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion - PredictHR{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgb(214, 208, 208) 0%, #f3f1f5 100%);
+    }
+    
+    .login-card {
+        background: white;
+        border-radius: 30px;
+        padding: 50px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 0.6s ease;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .login-logo {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #c4c9e1 0%, #764ba2 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+    
+    .login-logo i {
+        font-size: 40px;
+        color: white;
+    }
+    
+    .login-header h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .login-header p {
+        color: #888;
+        font-size: 14px;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+        font-size: 14px;
+    }
+    
+    .input-group {
+        position: relative;
+    }
+    
+    .input-group i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 14px 45px;
+        border: 2px solid #f0f0f0;
+        border-radius: 15px;
+        font-size: 14px;
+        transition: 0.3s;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #8a96cb;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .btn-login {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #b4b6bf 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+    
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .demo-credentials {
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        text-align: center;
+    }
+    
+    .demo-credentials p {
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 10px;
+    }
+    
+    .cred-badge {
+        display: inline-block;
+        background: white;
+        padding: 5px 12px;
+        border-radius: 8px;
+        margin: 0 5px;
+        font-family: monospace;
+        font-size: 12px;
+        color: #b2b3bb;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-logo">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h2>PredictHR</h2>
+            <p>Anticipez les départs, fidélisez vos talents</p>
+        </div>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Identifiant</label>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="text" name="username" class="form-control" placeholder="rh_manager" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Mot de passe</label>
+                <div class="input-group">
+                    <i class="fas fa-key"></i>
+                    <input type="password" name="password" class="form-control" placeholder="••••••" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i> Accéder au Dashboard
+            </button>
+        </form>
+        
+        <div class="demo-credentials">
+            <p><i class="fas fa-info-circle"></i> Accès démo</p>
+            <p>
+                <span class="cred-badge">rh_manager</span>
+                <span class="cred-badge">rh2024</span>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+<!-- templates/admin_users.html -->
+{% extends "base.html" %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>👥 Gestion des utilisateurs</h1>
+        <a href="{{ url_for('add_user_view') }}" class="btn btn-primary">+ Ajouter un utilisateur</a>
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <th>Nom complet</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for username, user_data in users.items() %}
+            <tr>
+                <td><strong>{{ username }}</strong></td>
+                <td>{{ user_data.get('fullname', '-') }}</td>
+                <td>{{ user_data.get('email', '-') }}</td>
+                <td>
+                    <span class="badge {% if user_data.role == 'admin' %}badge-admin{% elif user_data.role == 'manager' %}badge-manager{% else %}badge-user{% endif %}">
+                        {{ user_data.role }}
+                    </span>
+                </td>
+                <td>
+                    {% if username != user.username %}
+                        <a href="{{ url_for('delete_user_view', username=username) }}" 
+                           onclick="return confirm('Supprimer cet utilisateur ?')"
+                           class="btn btn-danger btn-sm">
+                            Supprimer
+                        </a>
+                    {% else %}
+                        <span class="text-muted">(Vous)</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+# Environnement virtuel
+.venv/
+env/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Données et Modèles (souvent trop lourds pour Git)
+data/
+models/*.pkl
+models/*.joblib
+
+# Fichiers de configuration sensibles
+users.json
+.env
+
+# Notebooks (optionnel, selon si tu veux les partager ou non)
+.ipynb_checkpoints/

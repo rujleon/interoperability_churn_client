@@ -9,3 +9,8 @@ short_description: 'Pilotage de la fidélisation client par l''IA '
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
+
+Utilisateur → index.html (public) → Click "Se connecter" → login.html → dashboard.html (privé)
+
+
