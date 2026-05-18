@@ -1,0 +1,38 @@
+# Environnements virtuels
+.venv/
+venv/
+env/
+ENV/
+
+# Fichiers Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers de données (ignorés car générés au build)
+*.pkl
+*.h5
+*.joblib
+*.db
+*.sqlite
+
+# Fichiers de log
+*.log
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+
+# Secrets
+.env
+.env.local
+
+# Documentation
+README.md

@@ -1,21 +1,37 @@
-# Environnement virtuel
-.venv/
-env/
-venv/
-
+cat > .gitignore << 'EOF'
 # Python
 __pycache__/
 *.py[cod]
+*.so
+.Python
 
-# Données et Modèles (souvent trop lourds pour Git)
-data/
-ml/*.pkl
-ml/*.joblib
+# Virtual environments
+.venv/
+venv/
+env/
 
-# Fichiers de configuration sensibles
-users.json
-.env
-
-# Notebooks (optionnel, selon si tu veux les partager ou non)
-.ipynb_checkpoints/
+# Binary files (critical for Hugging Face)
 *.pkl
+*.h5
+*.joblib
+*.db
+*.sqlite
+
+# Logs and data
+*.log
+data/
+
+# IDE
+.vscode/
+.idea/
+
+# Secrets
+.env
+.env.local
+
+# OS
+.DS_Store
+EOF
+
+git add .gitignore
+git commit -m "chore: comprehensive .gitignore for HF Spaces"
