@@ -18,3 +18,4 @@ users.json
 
 # Notebooks (optionnel, selon si tu veux les partager ou non)
 .ipynb_checkpoints/
+*.pkl
