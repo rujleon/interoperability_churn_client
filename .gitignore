@@ -9,8 +9,8 @@ __pycache__/
 
 # Données et Modèles (souvent trop lourds pour Git)
 data/
-models/*.pkl
-models/*.joblib
+ml/*.pkl
+ml/*.joblib
 
 # Fichiers de configuration sensibles
 users.json
