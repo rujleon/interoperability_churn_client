@@ -1,27 +1,63 @@
-FROM python:3.10-slim
+# ─── Build stage ─────────────────────────────────────────────────────────────
+FROM python:3.11-slim AS builder
 
-# Dépendances système pour psycopg2 (PostgreSQL)
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /build
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# Utilisateur non-root (bonne pratique)
-RUN useradd -m -u 1000 user
-USER user
-ENV PATH="/home/user/.local/bin:$PATH"
+# ─── Runtime stage ────────────────────────────────────────────────────────────
+FROM python:3.11-slim AS runtime
+
+LABEL maintainer="ChurnGuard API"
+LABEL description="Customer Churn Prediction API with ML"
+LABEL version="1.0.0"
+
+# Security: run as non-root user
+RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 WORKDIR /app
 
-# Copie et install des dépendances d'abord (layer cache Docker)
-COPY --chown=user requirements.txt .
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+# Copy installed packages from builder
+COPY --from=builder /install /usr/local
 
-# Copie du code
-COPY --chown=user . /app
+# Copy application code
+COPY app/ ./app/
+COPY ml/ ./ml/
+COPY templates/ ./templates/
 
-# Expose le port Flask
-EXPOSE 5000
+# Create required directories with correct permissions
+RUN mkdir -p /app/data /app/ml && \
+    chown -R appuser:appuser /app
 
-# Lancement avec Gunicorn (production) au lieu de uvicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "120", "main:app"]
+# Train model at build time
+RUN python -c "\
+import sys; \
+sys.path.insert(0, '/app'); \
+from ml.train_model import train; \
+train() \
+"
+
+# Switch to non-root user
+USER appuser
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+
+# Environment defaults
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    WORKERS=2 \
+    PORT=8000
+
+# Start with Gunicorn + Uvicorn workers for production
+CMD ["sh", "-c", "python -m gunicorn app.main:app \
+  --worker-class uvicorn.workers.UvicornWorker \
+  --workers ${WORKERS} \
+  --bind 0.0.0.0:${PORT} \
+  --timeout 120 \
+  --access-logfile - \
+  --error-logfile -"]

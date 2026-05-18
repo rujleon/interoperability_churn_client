@@ -1,1107 +1,1066 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PredictHR - Anticipez les départs, fidélisez vos talents</title>
-    <meta name="description" content="Solution IA d'analyse prédictive pour anticiper les risques de départ et optimiser la rétention des talents en entreprise">
-    <meta name="keywords" content="RH, prédiction churn, rétention talents, IA RH, analyse predictive">
-    
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-    
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        /* Navigation */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 40px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transition: all 0.3s;
-        }
-        
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-        
-        .logo-text h2 {
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .logo-text p {
-            font-size: 11px;
-            color: #888;
-            margin-top: 2px;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #667eea;
-        }
-        
-        .btn-nav {
-            padding: 10px 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white !important;
-            border-radius: 25px;
-            transition: transform 0.3s;
-        }
-        
-        .btn-nav:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 120px 40px 60px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-        
-        .hero-content h1 {
-            font-size: 52px;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-        
-        .hero-gradient-text {
-            background: linear-gradient(135deg, #fff 0%, #e0d4ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .hero-content p {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 30px;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .btn-primary {
-            padding: 14px 32px;
-            background: white;
-            color: #667eea;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-secondary {
-            padding: 14px 32px;
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .btn-secondary:hover {
-            background: white;
-            color: #667eea;
-        }
-        
-        .hero-stats {
-            display: flex;
-            gap: 40px;
-            margin-top: 50px;
-        }
-        
-        .stat-item h3 {
-            font-size: 32px;
-            font-weight: 800;
-            color: white;
-        }
-        
-        .stat-item p {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-            margin: 0;
-        }
-        
-        .hero-image {
-            position: relative;
-        }
-        
-        .hero-image img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-        
-        .floating-card {
-            position: absolute;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .card-1 {
-            top: -20px;
-            right: -20px;
-        }
-        
-        .card-2 {
-            bottom: 30px;
-            left: -30px;
-        }
-        
-        /* Sections */
-        section {
-            padding: 80px 40px;
-            background: white;
-        }
-        
-        .section-dark {
-            background: #f8f9fa;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .section-title h2 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .section-title p {
-            color: #666;
-            font-size: 18px;
-        }
-        
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .feature-card {
-            padding: 40px 30px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            text-align: center;
-            border: 1px solid #f0f0f0;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 25px;
-        }
-        
-        .feature-icon i {
-            font-size: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .feature-card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-        
-        /* How It Works */
-        .steps-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-top: 40px;
-        }
-        
-        .step {
-            text-align: center;
-            position: relative;
-        }
-        
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 auto 20px;
-        }
-        
-        .step h4 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .step p {
-            color: #666;
-        }
-        
-        /* Testimonials */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-        
-        .testimonial-card {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f0f0f0;
-        }
-        
-        .testimonial-text {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-        }
-        
-        .author-info h5 {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        
-        .author-info p {
-            font-size: 13px;
-            color: #888;
-        }
-        
-        .stars {
-            color: #ffc107;
-            margin-top: 5px;
-        }
-        
-        /* Pricing */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .pricing-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            transition: 0.3s;
-            border: 1px solid #f0f0f0;
-        }
-        
-        .pricing-card.popular {
-            border: 2px solid #667eea;
-            transform: scale(1.05);
-            position: relative;
-        }
-        
-        .popular-badge {
-            position: absolute;
-            top: -12px;
-            right: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .pricing-card h3 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        
-        .price {
-            font-size: 48px;
-            font-weight: 800;
-            color: #667eea;
-            margin: 20px 0;
-        }
-        
-        .price span {
-            font-size: 16px;
-            color: #888;
-        }
-        
-        .pricing-features {
-            list-style: none;
-            padding: 0;
-            margin: 30px 0;
-        }
-        
-        .pricing-features li {
-            padding: 10px 0;
-            color: #666;
-        }
-        
-        .pricing-features i {
-            color: #4caf50;
-            margin-right: 10px;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            border-radius: 30px;
-            margin: 40px;
-            padding: 60px;
-        }
-        
-        .cta-section h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        
-        .cta-section p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-        
-        .btn-cta {
-            padding: 15px 40px;
-            background: white;
-            color: #667eea;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        
-        .btn-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Footer */
-        footer {
-            background: #1a1a2e;
-            color: white;
-            padding: 60px 40px 30px;
-        }
-        
-        .footer-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-        }
-        
-        .footer-logo .logo-icon {
-            margin-bottom: 20px;
-        }
-        
-        .footer-logo p {
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 20px;
-        }
-        
-        .footer-links h4 {
-            margin-bottom: 20px;
-        }
-        
-        .footer-links a {
-            display: block;
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            margin-bottom: 10px;
-            transition: 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: white;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-        }
-        
-        .social-links a:hover {
-            background: #667eea;
-            transform: translateY(-3px);
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 40px;
-            margin-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        /* Responsive */
-        @media (max-width: 968px) {
-            .hero-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero-content h1 {
-                font-size: 36px;
-            }
-            
-            .navbar {
-                padding: 15px 20px;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            section {
-                padding: 60px 20px;
-            }
-            
-            .cta-section {
-                margin: 20px;
-                padding: 40px 20px;
-            }
-        }
-        
-        /* Animation */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .floating-card {
-            animation: float 3s ease-in-out infinite;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChurnGuard — Prédiction de Churn Client</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #3b82f6;
+    --accent2: #8b5cf6;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+    --critical: #dc2626;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --glow: 0 0 40px rgba(59,130,246,0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image: radial-gradient(ellipse at 20% 0%, rgba(59,130,246,0.08) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 100%, rgba(139,92,246,0.08) 0%, transparent 60%);
+  }
+
+  /* NAV */
+  nav {
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,15,26,0.85);
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .logo-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 99px;
+  }
+  nav .spacer { flex: 1; }
+  .nav-links { display: flex; gap: 0.5rem; }
+  .nav-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #e2e8f0 30%, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(59,130,246,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(59,130,246,0.5); }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--accent); background: var(--surface2); }
+
+  /* MAIN LAYOUT */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent);
+  }
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* SECTION TABS */
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  .tab {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    color: var(--muted);
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    margin-bottom: -1px;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* FORM */
+  .form-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+  @media (max-width: 900px) { .form-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .form-group input, .form-group select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+  }
+
+  /* TOKEN INPUT */
+  .token-bar {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+  }
+  .token-bar label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    white-space: nowrap;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .token-bar input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+  }
+  .token-bar input:focus { outline: none; border-color: var(--accent); }
+
+  /* RESULT PANEL */
+  #result-panel {
+    display: none;
+    margin-top: 2rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .prob-ring {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 1.5rem;
+    position: relative;
+  }
+  .prob-ring svg { transform: rotate(-90deg); }
+  .prob-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .prob-text .pct {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .prob-text .label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .risk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1.2rem;
+    border-radius: 99px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .factors-list { list-style: none; }
+  .factors-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .factors-list li:last-child { border-bottom: none; }
+
+  .recommendation-box {
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 10px;
+    padding: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #93c5fd;
+  }
+
+  /* REGISTER MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 500px;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .modal h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .modal p { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .modal-form { display: flex; flex-direction: column; gap: 1rem; }
+  .close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal { position: relative; }
+
+  /* TOKEN DISPLAY */
+  .token-display {
+    background: var(--bg);
+    border: 1px solid var(--success);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 1rem;
+    display: none;
+  }
+  .token-display .token-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--success);
+    word-break: break-all;
+    line-height: 1.6;
+  }
+  .token-display .copy-btn {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    padding: 0.4rem 1rem;
+  }
+
+  /* STATS CARDS */
+  .stat-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .stat-card .val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-card .lbl { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* CODE BLOCK */
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    overflow-x: auto;
+    color: #a3e635;
+    line-height: 1.7;
+  }
+  .code-comment { color: var(--muted); }
+  .code-key { color: #93c5fd; }
+  .code-val { color: #fbbf24; }
+  .code-str { color: #a3e635; }
+
+  /* LOADING */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ERROR/SUCCESS */
+  .alert {
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+  .alert-success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="logo-text">
-                    <h2>PredictHR</h2>
-                    <p>Anticipation & Performance</p>
-                </div>
-            </div>
-            <div class="nav-links">
-                <a href="#features">Fonctionnalités</a>
-                <a href="#how-it-works">Comment ça marche</a>
-                <a href="#testimonials">Témoignages</a>
-                <a href="#pricing">Tarifs</a>
-                <a href="{{ url_for('login') }}" class="btn-nav">Se connecter</a>
-            </div>
-        </div>
-    </nav>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-content" data-aos="fade-right">
-                <h1>
-                    Anticipez les départs<br>
-                    <span class="hero-gradient-text">Fidélisez vos talents</span>
-                </h1>
-                <p>
-                    PredictHR utilise l'intelligence artificielle pour prédire les risques de départ 
-                    de vos employés avec une précision de 92%. Agissez avant qu'il ne soit trop tard.
-                </p>
-                <div class="hero-buttons">
-                    <a href="/login" class="btn-primary">
-                        <i class="fas fa-rocket"></i> Commencer la démo
-                    </a>
-                    <a href="#how-it-works" class="btn-secondary">
-                        <i class="fas fa-play"></i> Voir démo
-                    </a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <h3>92%</h3>
-                        <p>Précision prédictive</p>
-                    </div>
-                    <div class="stat-item">
-                        <h3>45%</h3>
-                        <p>Réduction du turnover</p>
-                    </div>
-                    <div class="stat-item">
-                        <h3>150+</h3>
-                        <p>Entreprises clientes</p>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-image" data-aos="fade-left">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" alt="Dashboard RH">
-                <div class="floating-card card-1">
-                    <i class="fas fa-exclamation-triangle" style="color: #f72585;"></i>
-                    <span>🚨 3 départs à risque</span>
-                </div>
-                <div class="floating-card card-2">
-                    <i class="fas fa-chart-line" style="color: #4caf50;"></i>
-                    <span>📈 +15% rétention</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section id="features">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Fonctionnalités puissantes pour les RH</h2>
-                <p>Une solution complète pour anticiper et agir</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>IA Prédictive</h3>
-                    <p>Algorithmes avancés qui identifient les signaux faibles de départ jusqu'à 6 mois à l'avance.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                    <h3>Dashboard Interactif</h3>
-                    <p>Visualisation claire des KPIs, tendances et alertes pour une prise de décision rapide.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-icon">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <h3>Alertes Temps Réel</h3>
-                    <p>Notifications automatiques dès qu'un employé présente un risque critique.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-icon">
-                        <i class="fas fa-tasks"></i>
-                    </div>
-                    <h3>Plan d'Action Intelligent</h3>
-                    <p>Recommandations personnalisées pour chaque employé à risque.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
-                    <div class="feature-icon">
-                        <i class="fas fa-file-export"></i>
-                    </div>
-                    <h3>Rapports Automatisés</h3>
-                    <p>Génération de rapports PDF/Excel pour le comité de direction.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Sécurité RGPD</h3>
-                    <p>Données anonymisées et conformes aux réglementations européennes.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- How It Works -->
-    <section id="how-it-works" class="section-dark">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Comment ça marche ?</h2>
-                <p>3 étapes simples pour transformer vos données RH en actions concrètes</p>
-            </div>
-            <div class="steps-container">
-                <div class="step" data-aos="fade-up" data-aos-delay="100">
-                    <div class="step-number">1</div>
-                    <h4>📊 Import des données</h4>
-                    <p>Connectez votre SIRH ou importez vos données RH (anonymisées et sécurisées)</p>
-                </div>
-                <div class="step" data-aos="fade-up" data-aos-delay="200">
-                    <div class="step-number">2</div>
-                    <h4>🤖 Analyse IA</h4>
-                    <p>Notre modèle analyse 15+ facteurs de risque (ancienneté, satisfaction, management...)</p>
-                </div>
-                <div class="step" data-aos="fade-up" data-aos-delay="300">
-                    <div class="step-number">3</div>
-                    <h4>🎯 Actions RH</h4>
-                    <p>Recevez des alertes et un plan d'action priorisé pour retenir vos talents</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Testimonials -->
-    <section id="testimonials">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Ils nous font confiance</h2>
-                <p>Découvrez les retours de nos clients</p>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="testimonial-text">
-                        "Grâce à PredictHR, nous avons réduit notre turnover de 45% en 6 mois. 
-                        Les alertes précoces nous permettent d'intervenir avant que les talents ne soient tentés de partir."
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">S</div>
-                        <div class="author-info">
-                            <h5>Sophie Martin</h5>
-                            <p>DRH - Groupe Océane</p>
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="testimonial-text">
-                        "L'interface est intuitive et les recommandations sont toujours pertinentes. 
-                        Un outil indispensable pour notre service RH qui gère plus de 500 collaborateurs."
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">T</div>
-                        <div class="author-info">
-                            <h5>Thomas Dubois</h5>
-                            <p>Head of People - TechCorp</p>
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="testimonial-text">
-                        "Le ROI a été immédiat. En anticipant 8 départs critiques, nous avons économisé 
-                        plus de 200 000€ en coûts de recrutement et formation."
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">L</div>
-                        <div class="author-info">
-                            <h5>Laurence Petit</h5>
-                            <p>Responsable RH - Innov'Tech</p>
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Pricing -->
-    <section id="pricing" class="section-dark">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Tarifs adaptés à vos besoins</h2>
-                <p>Des formules flexibles pour toutes les tailles d'entreprise</p>
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
-                    <h3>Startup</h3>
-                    <div class="price">499€<span>/mois</span></div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Jusqu'à 50 employés</li>
-                        <li><i class="fas fa-check"></i> Dashboard basique</li>
-                        <li><i class="fas fa-check"></i> Alertes email</li>
-                        <li><i class="fas fa-check"></i> Support 5j/7</li>
-                    </ul>
-                    <button class="btn-primary" style="background: #667eea; color: white;" onclick="window.location.href='/login'">
-                        Commencer
-                    </button>
-                </div>
-                <div class="pricing-card popular" data-aos="fade-up" data-aos-delay="200">
-                    <div class="popular-badge">⭐ Populaire</div>
-                    <h3>Business</h3>
-                    <div class="price">999€<span>/mois</span></div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Jusqu'à 200 employés</li>
-                        <li><i class="fas fa-check"></i> Dashboard avancé</li>
-                        <li><i class="fas fa-check"></i> Alertes temps réel</li>
-                        <li><i class="fas fa-check"></i> API personnalisée</li>
-                        <li><i class="fas fa-check"></i> Support prioritaire</li>
-                    </ul>
-                    <button class="btn-primary" style="background: #667eea; color: white;" onclick="window.location.href='/login'">
-                        Essai gratuit
-                    </button>
-                </div>
-                <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
-                    <h3>Enterprise</h3>
-                    <div class="price">Sur mesure</div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Employés illimités</li>
-                        <li><i class="fas fa-check"></i> Dashboard sur mesure</li>
-                        <li><i class="fas fa-check"></i> Modèle dédié</li>
-                        <li><i class="fas fa-check"></i> Formation RH incluse</li>
-                        <li><i class="fas fa-check"></i> SLA 99.9%</li>
-                    </ul>
-                    <button class="btn-primary" style="background: #667eea; color: white;">
-                        Nous contacter
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <div class="cta-section" data-aos="zoom-in">
-        <h2>Prêt à anticiper les départs ?</h2>
-        <p>Rejoignez plus de 150 entreprises qui utilisent PredictHR au quotidien</p>
-        <button class="btn-cta" onclick="window.location.href='/login'">
-            <i class="fas fa-calendar-check"></i> Demander une démo personnalisée
-        </button>
+
+<nav>
+  <span class="logo">ChurnGuard</span>
+  <span class="logo-badge">ML API v1.0</span>
+  <div class="spacer"></div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showSection('demo')">🔮 Démo</button>
+    <button class="nav-btn" onclick="showSection('docs')">📖 Guide</button>
+    <a href="/docs" class="nav-btn" target="_blank">⚡ Swagger</a>
+  </div>
+  <button class="btn-primary" onclick="openModal()" style="padding:0.4rem 1.2rem;font-size:0.85rem">
+    Obtenir un token →
+  </button>
+</nav>
+
+<div class="hero">
+  <h1>Prédisez le churn<br><em>avant qu'il arrive</em></h1>
+  <p>API ML haute-précision pour détecter les clients à risque de désabonnement.<br>
+  Gradient Boosting · Sécurité par token · Rate limiting · Docker-ready</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="openModal()">Créer mon compte →</button>
+    <a href="/docs" class="btn-secondary" target="_blank">Documentation API</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- DEMO SECTION -->
+  <div id="section-demo" class="section">
+    <div class="token-bar">
+      <label>🔑 Token API</label>
+      <input type="text" id="global-token" placeholder="churn_xxxxxxxxxxxx..." />
+      <button class="btn-secondary" onclick="loadStats()" style="white-space:nowrap;font-size:0.85rem">Mes stats</button>
     </div>
-    
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-logo">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="logo-text">
-                        <h2 style="color: white; -webkit-text-fill-color: white;">PredictHR</h2>
-                    </div>
-                </div>
-                <p>Solution IA d'anticipation des départs pour les RH modernes.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                </div>
-            </div>
-            <div class="footer-links">
-                <h4>Produit</h4>
-                <a href="#features">Fonctionnalités</a>
-                <a href="#pricing">Tarifs</a>
-                <a href="#">API</a>
-                <a href="#">Sécurité</a>
-            </div>
-            <div class="footer-links">
-                <h4>Ressources</h4>
-                <a href="#">Blog</a>
-                <a href="#">Documentation</a>
-                <a href="#">Support</a>
-                <a href="#">Webinaires</a>
-            </div>
-            <div class="footer-links">
-                <h4>Contact</h4>
-                <a href="#">contact@predicthr.com</a>
-                <a href="#">+33 1 23 45 67 89</a>
-                <a href="#">19 Rue de l'IA, 75001 Paris</a>
-            </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('predict')">🔮 Prédiction</div>
+      <div class="tab" onclick="switchTab('stats')">📊 Statistiques</div>
+      <div class="tab" onclick="switchTab('history')">📋 Historique</div>
+    </div>
+
+    <!-- PREDICT TAB -->
+    <div id="tab-predict" class="tab-content active">
+      <div class="card">
+        <div class="card-title">Données client</div>
+        <div class="alert alert-error" id="pred-error"></div>
+
+        <div class="form-grid" id="predict-form">
+          <div class="form-group">
+            <label>Nom du client</label>
+            <input type="text" id="f-name" placeholder="Akomba">
+          </div>
+          <div class="form-group">
+            <label>Ancienneté (mois)</label>
+            <input type="number" id="f-tenure"  min="0" max="240" placeholder="8">
+          </div>
+          <div class="form-group">
+            <label>Charges mensuelles (Ar)</label>
+            <input type="number" id="f-monthly"  step="0.01" placeholder="89.50">
+          </div>
+          <div class="form-group">
+            <label>Charges totales (Ar)</label>
+            <input type="number" id="f-total"  step="0.01" placeholder="716">
+          </div>
+          <div class="form-group">
+            <label>Nombre de produits</label>
+            <input type="number" id="f-products"  min="1" max="10" placeholder="2">
+          </div>
+          <div class="form-group">
+            <label>Type de contrat</label>
+            <select id="f-contract">
+              <option value="0">Mois-à-mois</option>
+              <option value="1">1 an</option>
+              <option value="2">2 ans</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Mode de paiement</label>
+            <select id="f-payment">
+              <option value="0">Électronique</option>
+              <option value="1">Chèque postal</option>
+              <option value="2">Virement bancaire</option>
+              <option value="3">Carte de crédit</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tickets support</label>
+            <input type="number" id="f-tickets"  min="0" max="50" placeholder="5">
+          </div>
+          <div class="form-group">
+            <label>Jours sans interaction</label>
+            <input type="number" id="f-days"  min="0" placeholder="45">
+          </div>
+          <div class="form-group">
+            <label>Long distance moyen (Ar)</label>
+            <input type="number" id="f-ld"  step="0.1" placeholder="12.5">
+          </div>
+          <div class="form-group">
+            <label>Internet</label>
+            <select id="f-internet">
+              <option value="true">Oui</option>
+              <option value="false">Non</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <select id="f-phone">
+              <option value="true">Oui</option>
+              <option value="false">Non</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Support technique</label>
+            <select id="f-techsup">
+              <option value="false">Non</option>
+              <option value="true">Oui</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sécurité en ligne</label>
+            <select id="f-security">
+              <option value="false">Non</option>
+              <option value="true">Oui</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Facturation dématérialisée</label>
+            <select id="f-paperless">
+              <option value="true">Oui</option>
+              <option value="false">Non</option>
+            </select>
+          </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 PredictHR - Tous droits réservés | <a href="#" style="color: white;">Mentions légales</a> | <a href="#" style="color: white;">RGPD</a></p>
+        <div style="margin-top:1.5rem; display:flex; gap:1rem; flex-wrap:wrap;">
+          <button class="btn-primary" onclick="runPrediction()">🔮 Lancer la prédiction</button>
+          <button class="btn-secondary" onclick="randomizeForm()">🎲 Données aléatoires</button>
         </div>
-    </footer>
-    
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
-        
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-        
-                // Navbar background change on scroll
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                navbar.style.boxShadow = 'none';
-            }
-        });
-        
-        // Animation counter for stats
-        function animateCounter(element, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const value = Math.floor(progress * (end - start) + start);
-                element.textContent = value + (element.dataset.suffix || '');
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
-        
-        // Trigger counters when stats come into view
-        const observerOptions = {
-            threshold: 0.5,
-            rootMargin: '0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const stats = entry.target.querySelectorAll('.stat-item h3');
-                    stats.forEach(stat => {
-                        const finalValue = parseInt(stat.textContent);
-                        if (!isNaN(finalValue) && !stat.classList.contains('animated')) {
-                            stat.classList.add('animated');
-                            animateCounter(stat, 0, finalValue, 2000);
-                        }
-                    });
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-        
-        const heroStats = document.querySelector('.hero-stats');
-        if (heroStats) {
-            observer.observe(heroStats);
-        }
-        
-        // Add hover effect on pricing cards
-        document.querySelectorAll('.pricing-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-10px)';
-            });
-            card.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('popular')) {
-                    this.style.transform = 'translateY(0)';
-                } else {
-                    this.style.transform = 'scale(1.05)';
-                }
-            });
-        });
-        
-        // Simple form validation for demo request
-        const demoButtons = document.querySelectorAll('.btn-cta, .btn-primary');
-        demoButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                if (this.textContent.includes('Démo') || this.textContent.includes('Essai')) {
-                    e.preventDefault();
-                    // Simuler une redirection vers login avec message
-                    window.location.href = '/login?demo=true';
-                }
-            });
-        });
-        
-        // Add loading animation when clicking on login button
-        const loginBtn = document.querySelector('.btn-nav');
-        if (loginBtn) {
-            loginBtn.addEventListener('click', function(e) {
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Chargement...';
-            });
-        }
-        
-        // Parallax effect on hero section
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-                hero.style.opacity = 1 - scrolled / 500;
-            }
-        });
-        
-        // Tooltip for feature cards
-        const featureCards = document.querySelectorAll('.feature-card');
-        featureCards.forEach(card => {
-            card.addEventListener('click', function() {
-                const title = this.querySelector('h3').textContent;
-                const description = this.querySelector('p').textContent;
-                console.log(`Feature clicked: ${title} - ${description}`);
-                // Ici vous pouvez ajouter une modale ou une redirection
-            });
-        });
-        
-        console.log('✅ PredictHR - Page chargée avec succès');
-    </script>
+      </div>
+
+      <div class="loading" id="pred-loading">
+        <div class="spinner"></div>
+        Analyse en cours...
+      </div>
+
+      <div id="result-panel">
+        <div class="grid-2" style="gap:2rem; align-items:start;">
+          <div style="text-align:center">
+            <div class="prob-ring">
+              <svg width="140" height="140" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="58" fill="none" stroke="#1a2235" stroke-width="14"/>
+                <circle id="prob-circle" cx="70" cy="70" r="58" fill="none" stroke="#3b82f6"
+                  stroke-width="14" stroke-linecap="round"
+                  stroke-dasharray="364.4" stroke-dashoffset="364.4"
+                  style="transition: stroke-dashoffset 1s ease, stroke 0.5s ease"/>
+              </svg>
+              <div class="prob-text">
+                <div class="pct" id="prob-pct">—</div>
+                <div class="label">Probabilité</div>
+              </div>
+            </div>
+            <div id="risk-badge" class="risk-badge" style="margin:0 auto; display:inline-flex;"></div>
+            <p id="customer-label" style="margin-top:0.75rem; color:var(--muted); font-size:0.9rem;"></p>
+          </div>
+          <div>
+            <div style="margin-bottom:1rem">
+              <div style="font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem">Recommandation</div>
+              <div class="recommendation-box" id="recommendation"></div>
+            </div>
+            <div>
+              <div style="font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem">Facteurs clés</div>
+              <ul class="factors-list" id="factors-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS TAB -->
+    <div id="tab-stats" class="tab-content">
+      <div class="alert alert-error" id="stats-error"></div>
+      <div class="loading" id="stats-loading">
+        <div class="spinner"></div>Chargement...
+      </div>
+      <div id="stats-content" style="display:none">
+        <div class="grid-3" style="margin-bottom:1.5rem">
+          <div class="stat-card">
+            <div class="val" id="s-total" style="color:#3b82f6">0</div>
+            <div class="lbl">Prédictions totales</div>
+          </div>
+          <div class="stat-card">
+            <div class="val" id="s-churners" style="color:#ef4444">0</div>
+            <div class="lbl">Churners détectés</div>
+          </div>
+          <div class="stat-card">
+            <div class="val" id="s-rate" style="color:#f59e0b">0%</div>
+            <div class="lbl">Taux de churn</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Répartition par niveau de risque</div>
+          <div id="risk-bars"></div>
+        </div>
+      </div>
+      <div id="stats-empty" style="text-align:center;padding:3rem;color:var(--muted);display:none">
+        <div style="font-size:3rem;margin-bottom:1rem">📭</div>
+        Aucune prédiction encore. Lancez d'abord une prédiction !
+      </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div id="tab-history" class="tab-content">
+      <div class="alert alert-error" id="hist-error"></div>
+      <div class="loading" id="hist-loading"><div class="spinner"></div>Chargement...</div>
+      <div id="hist-content"></div>
+    </div>
+  </div>
+
+  <!-- DOCS SECTION -->
+  <div id="section-docs" class="section" style="display:none">
+    <div class="card" style="margin-bottom:1.5rem">
+      <div class="card-title">🚀 Guide de démarrage rapide</div>
+      <p style="color:var(--muted);margin-bottom:1.5rem">Commencez à prédire le churn en 3 étapes simples.</p>
+
+      <div style="display:flex;flex-direction:column;gap:1.5rem">
+        <div>
+          <div style="font-weight:600;margin-bottom:0.5rem;color:#93c5fd">1. Enregistrez-vous pour obtenir votre token</div>
+          <pre><span class="code-comment"># POST /clients/register</span>
+curl -X POST https://your-api.com/clients/register \
+  -H <span class="code-str">"Content-Type: application/json"</span> \
+  -d <span class="code-str">'{"name":"Akomba","email":"akomba@gmail.com","company":"Acme"}'</span></pre>
+        </div>
+        <div>
+          <div style="font-weight:600;margin-bottom:0.5rem;color:#93c5fd">2. Faites une prédiction</div>
+          <pre><span class="code-comment"># POST /predict</span>
+curl -X POST https://your-api.com/predict \
+  -H <span class="code-str">"X-API-Token: churn_votre_token"</span> \
+  -H <span class="code-str">"Content-Type: application/json"</span> \
+  -d <span class="code-str">'{
+    "customer_name": "Akomba",
+    "tenure_months": 8,
+    "monthly_charges": 89.5,
+    "total_charges": 716.0,
+    "num_products": 2,
+    "contract_type": 0,
+    ...
+  }'</span></pre>
+        </div>
+        <div>
+          <div style="font-weight:600;margin-bottom:0.5rem;color:#93c5fd">3. Interprétez la réponse</div>
+          <pre>{
+  <span class="code-key">"churn_probability"</span>: <span class="code-val">0.7842</span>,
+  <span class="code-key">"churn_prediction"</span>: <span class="code-val">true</span>,
+  <span class="code-key">"risk_level"</span>: <span class="code-str">"Élevé"</span>,
+  <span class="code-key">"recommendation"</span>: <span class="code-str">"Action immédiate recommandée..."</span>,
+  <span class="code-key">"key_factors"</span>: [<span class="code-str">"⚠️ Contrat mois-à-mois"</span>, <span class="code-str">"⚠️ Client récent"</span>]
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">🔐 Sécurité</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.75rem;color:var(--muted);font-size:0.9rem">
+          <li>✅ Token HMAC-SHA256 par client</li>
+          <li>✅ Expiration configurable du token</li>
+          <li>✅ Rate limiting : 100 req/heure</li>
+          <li>✅ Validation de signature à chaque requête</li>
+          <li>✅ Renouvellement de token sécurisé</li>
+          <li>✅ Isolation complète des données par client</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">📦 Endpoints disponibles</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem">
+          <li><span style="color:#10b981;font-family:'DM Mono',monospace">POST</span> <span style="color:#93c5fd">/clients/register</span></li>
+          <li><span style="color:#3b82f6;font-family:'DM Mono',monospace">GET</span>&nbsp; <span style="color:#93c5fd">/clients/me</span></li>
+          <li><span style="color:#10b981;font-family:'DM Mono',monospace">POST</span> <span style="color:#93c5fd">/clients/me/refresh-token</span></li>
+          <li><span style="color:#10b981;font-family:'DM Mono',monospace">POST</span> <span style="color:#93c5fd">/predict</span></li>
+          <li><span style="color:#10b981;font-family:'DM Mono',monospace">POST</span> <span style="color:#93c5fd">/predict/batch</span></li>
+          <li><span style="color:#3b82f6;font-family:'DM Mono',monospace">GET</span>&nbsp; <span style="color:#93c5fd">/predictions/history</span></li>
+          <li><span style="color:#3b82f6;font-family:'DM Mono',monospace">GET</span>&nbsp; <span style="color:#93c5fd">/predictions/stats</span></li>
+          <li><span style="color:#3b82f6;font-family:'DM Mono',monospace">GET</span>&nbsp; <span style="color:#93c5fd">/health</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <h2>Créer un compte</h2>
+    <p>Recevez votre token API unique pour accéder à l'API de prédiction.</p>
+    <div class="alert alert-error" id="reg-error"></div>
+    <div class="modal-form">
+      <div class="form-group">
+        <label>Nom complet </label>
+        <input type="text" id="reg-name" placeholder="Rojo">
+      </div>
+      <div class="form-group">
+        <label>Email </label>
+        <input type="email" id="reg-email" placeholder="rojo@company.com">
+      </div>
+      <div class="form-group">
+        <label>Société</label>
+        <input type="text" id="reg-company" placeholder="Acme Corp">
+      </div>
+      <div class="form-group">
+        <label>Validité du token (jours)</label>
+        <input type="number" id="reg-days" value="365" min="1" max="730">
+      </div>
+      <button class="btn-primary" onclick="registerClient()" id="reg-btn">
+        Créer mon compte →
+      </button>
+    </div>
+    <div class="token-display" id="token-display">
+      <div style="font-size:0.8rem;color:var(--success);font-weight:600;margin-bottom:0.5rem">✅ Compte créé ! Voici votre token :</div>
+      <div class="token-val" id="token-val"></div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem">⚠️ Conservez ce token précieusement. Il ne sera plus affiché.</div>
+      <button class="btn-secondary copy-btn" onclick="copyToken()">📋 Copier le token</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  ChurnGuard ML API &nbsp;·&nbsp; <a href="/docs">Documentation Swagger</a> &nbsp;·&nbsp;
+  <a href="/health">Status API</a> &nbsp;·&nbsp; Modèle : Gradient Boosting · ROC-AUC > 0.88
+</footer>
+
+<script>
+const API_BASE = '';
+let currentToken = '';
+
+function getToken() {
+  return document.getElementById('global-token').value.trim() || currentToken;
+}
+
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.getElementById('section-' + name).style.display = 'block';
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'stats') loadStats();
+  if (name === 'history') loadHistory();
+}
+
+function openModal() {
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('token-display').style.display = 'none';
+  document.getElementById('reg-error').style.display = 'none';
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+async function registerClient() {
+  const btn = document.getElementById('reg-btn');
+  const name = document.getElementById('reg-name').value;
+  const email = document.getElementById('reg-email').value;
+  const company = document.getElementById('reg-company').value;
+  const days = parseInt(document.getElementById('reg-days').value);
+  const errEl = document.getElementById('reg-error');
+  errEl.style.display = 'none';
+
+  if (!name || !email) { showError(errEl, 'Nom et email requis.'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Création...';
+  try {
+    const res = await fetch('/clients/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, email, company, token_validity_days: days})
+    });
+    const data = await res.json();
+    if (!res.ok) { showError(errEl, data.detail || 'Erreur lors de l\'inscription.'); return; }
+
+    currentToken = data.api_token;
+    document.getElementById('global-token').value = data.api_token;
+    document.getElementById('token-val').textContent = data.api_token;
+    document.getElementById('token-display').style.display = 'block';
+    btn.textContent = '✅ Compte créé';
+  } catch(e) {
+    showError(errEl, 'Erreur réseau. Vérifiez votre connexion.');
+  } finally {
+    btn.disabled = false;
+    if (btn.textContent === 'Création...') btn.textContent = 'Créer mon compte →';
+  }
+}
+
+function copyToken() {
+  const t = document.getElementById('token-val').textContent;
+  navigator.clipboard.writeText(t);
+  event.target.textContent = '✅ Copié !';
+  setTimeout(() => event.target.textContent = '📋 Copier le token', 2000);
+}
+
+function showError(el, msg) {
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function randomizeForm() {
+  document.getElementById('f-tenure').value = Math.floor(Math.random() * 72);
+  document.getElementById('f-monthly').value = (20 + Math.random() * 100).toFixed(2);
+  document.getElementById('f-total').value = (100 + Math.random() * 5000).toFixed(2);
+  document.getElementById('f-products').value = Math.floor(1 + Math.random() * 5);
+  document.getElementById('f-tickets').value = Math.floor(Math.random() * 10);
+  document.getElementById('f-days').value = Math.floor(Math.random() * 365);
+  document.getElementById('f-ld').value = (Math.random() * 50).toFixed(1);
+  document.getElementById('f-contract').value = Math.floor(Math.random() * 3);
+  document.getElementById('f-payment').value = Math.floor(Math.random() * 4);
+}
+
+async function runPrediction() {
+  const token = getToken();
+  const errEl = document.getElementById('pred-error');
+  errEl.style.display = 'none';
+  if (!token) { showError(errEl, 'Veuillez entrer votre token API.'); return; }
+
+  const payload = {
+    customer_name: document.getElementById('f-name').value || undefined,
+    tenure_months: parseInt(document.getElementById('f-tenure').value),
+    monthly_charges: parseFloat(document.getElementById('f-monthly').value),
+    total_charges: parseFloat(document.getElementById('f-total').value),
+    num_products: parseInt(document.getElementById('f-products').value),
+    has_internet: document.getElementById('f-internet').value === 'true',
+    has_phone: document.getElementById('f-phone').value === 'true',
+    contract_type: parseInt(document.getElementById('f-contract').value),
+    payment_method: parseInt(document.getElementById('f-payment').value),
+    paperless_billing: document.getElementById('f-paperless').value === 'true',
+    tech_support: document.getElementById('f-techsup').value === 'true',
+    online_security: document.getElementById('f-security').value === 'true',
+    num_support_tickets: parseInt(document.getElementById('f-tickets').value),
+    avg_monthly_long_distance: parseFloat(document.getElementById('f-ld').value),
+    days_since_last_interaction: parseInt(document.getElementById('f-days').value)
+  };
+
+  document.getElementById('pred-loading').style.display = 'block';
+  document.getElementById('result-panel').style.display = 'none';
+
+  try {
+    const res = await fetch('/predict', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-API-Token': token},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) { showError(errEl, data.detail || 'Erreur de prédiction.'); return; }
+    displayResult(data);
+  } catch(e) {
+    showError(errEl, 'Erreur réseau.');
+  } finally {
+    document.getElementById('pred-loading').style.display = 'none';
+  }
+}
+
+function displayResult(data) {
+  const panel = document.getElementById('result-panel');
+  panel.style.display = 'block';
+
+  const pct = Math.round(data.churn_probability * 100);
+  document.getElementById('prob-pct').textContent = pct + '%';
+  document.getElementById('prob-pct').style.color = data.risk_color;
+
+  const circumference = 364.4;
+  const offset = circumference - (pct / 100) * circumference;
+  const circle = document.getElementById('prob-circle');
+  circle.style.strokeDashoffset = offset;
+  circle.style.stroke = data.risk_color;
+
+  const badge = document.getElementById('risk-badge');
+  badge.textContent = data.risk_level;
+  badge.style.background = data.risk_color + '22';
+  badge.style.border = `1px solid ${data.risk_color}66`;
+  badge.style.color = data.risk_color;
+
+  if (data.customer_name) {
+    document.getElementById('customer-label').textContent = '👤 ' + data.customer_name;
+  }
+
+  document.getElementById('recommendation').textContent = data.recommendation;
+
+  const factorsList = document.getElementById('factors-list');
+  factorsList.innerHTML = data.key_factors.map(f => `<li>${f}</li>`).join('');
+}
+
+async function loadStats() {
+  const token = getToken();
+  const errEl = document.getElementById('stats-error');
+  errEl.style.display = 'none';
+  if (!token) { showError(errEl, 'Veuillez entrer votre token.'); return; }
+
+  document.getElementById('stats-loading').style.display = 'block';
+  document.getElementById('stats-content').style.display = 'none';
+  document.getElementById('stats-empty').style.display = 'none';
+
+  try {
+    const res = await fetch('/predictions/stats', {
+      headers: {'X-API-Token': token}
+    });
+    const data = await res.json();
+    if (!res.ok) { showError(errEl, data.detail || 'Erreur.'); return; }
+    if (data.total === 0) {
+      document.getElementById('stats-empty').style.display = 'block';
+      return;
+    }
+    document.getElementById('s-total').textContent = data.total_predictions;
+    document.getElementById('s-churners').textContent = data.total_churners_detected;
+    document.getElementById('s-rate').textContent = data.churn_rate + '%';
+
+    const bars = document.getElementById('risk-bars');
+    const total = data.total_predictions;
+    const levels = [
+      {name: 'Critique', color: '#dc2626', count: data.by_risk_level['Critique']},
+      {name: 'Élevé', color: '#ef4444', count: data.by_risk_level['Élevé']},
+      {name: 'Modéré', color: '#f59e0b', count: data.by_risk_level['Modéré']},
+      {name: 'Faible', color: '#10b981', count: data.by_risk_level['Faible']},
+    ];
+    bars.innerHTML = levels.map(l => `
+      <div style="margin-bottom:1rem">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;font-size:0.85rem">
+          <span style="color:${l.color}">${l.name}</span>
+          <span style="color:var(--muted)">${l.count} / ${total}</span>
+        </div>
+        <div style="background:var(--bg);border-radius:99px;height:8px;overflow:hidden">
+          <div style="background:${l.color};width:${total>0?Math.round(l.count/total*100):0}%;height:100%;border-radius:99px;transition:width 0.8s ease"></div>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('stats-content').style.display = 'block';
+  } catch(e) {
+    showError(errEl, 'Erreur réseau.');
+  } finally {
+    document.getElementById('stats-loading').style.display = 'none';
+  }
+}
+
+async function loadHistory() {
+  const token = getToken();
+  const errEl = document.getElementById('hist-error');
+  errEl.style.display = 'none';
+  if (!token) { showError(errEl, 'Veuillez entrer votre token.'); return; }
+  document.getElementById('hist-loading').style.display = 'block';
+  document.getElementById('hist-content').innerHTML = '';
+
+  try {
+    const res = await fetch('/predictions/history?page_size=20', {
+      headers: {'X-API-Token': token}
+    });
+    const data = await res.json();
+    if (!res.ok) { showError(errEl, data.detail || 'Erreur.'); return; }
+    if (!data.predictions.length) {
+      document.getElementById('hist-content').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted)">📭 Aucune prédiction encore.</div>';
+      return;
+    }
+    const riskColors = {'Faible':'#10b981','Modéré':'#f59e0b','Élevé':'#ef4444','Critique':'#dc2626'};
+    document.getElementById('hist-content').innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+        <thead>
+          <tr style="color:var(--muted);border-bottom:1px solid var(--border)">
+            <th style="padding:0.75rem;text-align:left">Client</th>
+            <th style="padding:0.75rem;text-align:center">Probabilité</th>
+            <th style="padding:0.75rem;text-align:center">Risque</th>
+            <th style="padding:0.75rem;text-align:right">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.predictions.map(p => `
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:0.75rem">${p.customer_name || '—'}</td>
+            <td style="padding:0.75rem;text-align:center;font-family:'DM Mono',monospace">${Math.round(p.churn_probability*100)}%</td>
+            <td style="padding:0.75rem;text-align:center">
+              <span style="background:${riskColors[p.risk_level]}22;color:${riskColors[p.risk_level]};padding:0.2rem 0.75rem;border-radius:99px;font-size:0.8rem">${p.risk_level}</span>
+            </td>
+            <td style="padding:0.75rem;text-align:right;color:var(--muted)">${new Date(p.created_at).toLocaleDateString('fr-FR')}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <div style="text-align:center;margin-top:1rem;color:var(--muted);font-size:0.85rem">${data.total} prédictions au total</div>
+    `;
+  } catch(e) {
+    showError(errEl, 'Erreur réseau.');
+  } finally {
+    document.getElementById('hist-loading').style.display = 'none';
+  }
+}
+</script>
 </body>
 </html>

@@ -1,0 +1,14 @@
+[flake8]
+# Ignorer les warnings de style non critiques
+ignore = E501, W503, E203, E712
+
+# Ligne max acceptable
+max-line-length = 120
+
+# Exclure l'environnement virtuel et les caches
+exclude = .git,__pycache__,env,.venv,.venv_clean,migrations,venv
+
+# Ne pas vérifier les fichiers dans .venv
+per-file-ignores = 
+    .venv/*: ALL
+    */site-packages/*: ALL

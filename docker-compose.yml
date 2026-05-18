@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  # ─── Churn API ──────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: churnguard-api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-sqlite:////app/data/churn.db}
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production-use-openssl-rand-hex-32}
+      - RATE_LIMIT_REQUESTS=${RATE_LIMIT_REQUESTS:-100}
+      - RATE_LIMIT_WINDOW=${RATE_LIMIT_WINDOW:-3600}
+      - WORKERS=${WORKERS:-2}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-*}
+    volumes:
+      - churn_data:/app/data
+      - churn_models:/app/ml
+    healthcheck:
+      test: ["CMD", "python", "-c",
+        "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - churnnet
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.churnapi.rule=Host(`${DOMAIN:-localhost}`)"
+      - "traefik.http.routers.churnapi.entrypoints=websecure"
+      - "traefik.http.routers.churnapi.tls.certresolver=letsencrypt"
+      - "traefik.http.services.churnapi.loadbalancer.server.port=8000"
+
+  # ─── Reverse Proxy + SSL (production) ──────────────────────────────────────
+  traefik:
+    image: traefik:v3.0
+    container_name: churnguard-traefik
+    restart: unless-stopped
+    profiles: ["production"]
+    command:
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@example.com}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:/letsencrypt
+    networks:
+      - churnnet
+
+volumes:
+  churn_data:
+    driver: local
+  churn_models:
+    driver: local
+  letsencrypt:
+    driver: local
+
+networks:
+  churnnet:
+    driver: bridge

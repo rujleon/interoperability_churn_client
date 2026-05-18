@@ -1,0 +1,22 @@
+# ─── ChurnGuard API — Configuration ──────────────────────────────────────────
+
+# SÉCURITÉ (obligatoire)
+SECRET_KEY=3f8a2b1c9d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0
+
+# BASE DE DONNÉES (SQLite par défaut, aucune installation requise)
+DATABASE_URL=sqlite:////app/data/churn.db
+
+# SERVEUR
+PORT=8000
+WORKERS=2
+
+# RATE LIMITING
+RATE_LIMIT_REQUESTS=100
+RATE_LIMIT_WINDOW=3600
+
+# CORS (domaines autorisés, * = tous)
+ALLOWED_ORIGINS=*
+
+# PRODUCTION UNIQUEMENT (laisser vide en local)
+DOMAIN=
+ACME_EMAIL=
