@@ -40,24 +40,26 @@ train() \
 # Switch to non-root user
 USER appuser
 
-# Expose port
-EXPOSE 8000
+# ⚠️ CHANGEMENT 1 : Exposer le port 7860 (port par défaut HF)
+EXPOSE 7860
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+# ⚠️ CHANGEMENT 2 : Health check adapté au port 7860
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
+  CMD python -c "import urllib.request, os; port = os.environ.get('PORT', '7860'); urllib.request.urlopen(f'http://localhost:{port}/health')" || exit 1
 
-# Environment defaults
+# ⚠️ CHANGEMENT 3 : PORT par défaut = 7860
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     WORKERS=2 \
-    PORT=8000
+    PORT=7860
 
 # Start with Gunicorn + Uvicorn workers for production
+# ⚠️ CHANGEMENT 4 : timeout augmenté pour HF
 CMD ["sh", "-c", "python -m gunicorn app.main:app \
   --worker-class uvicorn.workers.UvicornWorker \
   --workers ${WORKERS} \
   --bind 0.0.0.0:${PORT} \
   --timeout 120 \
+  --keep-alive 5 \
   --access-logfile - \
   --error-logfile -"]
