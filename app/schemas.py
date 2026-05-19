@@ -13,6 +13,8 @@ class ClientRegister(BaseModel):
     email: EmailStr
     company: Optional[str] = Field(None, max_length=100)
     token_validity_days: int = Field(365, ge=1, le=730)
+    invite_code: Optional[str] = Field("", description="Code d'invitation requis")
+
 
     class Config:
         json_schema_extra = {
@@ -21,6 +23,7 @@ class ClientRegister(BaseModel):
                 "email": "alice@acmecorp.com",
                 "company": "Acme Corp",
                 "token_validity_days": 365,
+                "invite_code": "mon-code-secret",
             }
         }
 

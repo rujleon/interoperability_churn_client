@@ -29,7 +29,12 @@ from app.schemas import (
     HealthResponse,
     TokenRefreshResponse,
 )
-from app.security import generate_api_token, get_current_client, get_remaining_requests
+from app.security import (
+    generate_api_token,
+    get_current_client,
+    get_remaining_requests,
+    check_registration_allowed,
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -115,13 +120,15 @@ async def health_check():
 # ─── CLIENT REGISTRATION ──────────────────────────────────────────────────────
 
 
-@app.post(
-    "/clients/register",
-    response_model=ClientResponse,
-    tags=["Authentication"],
-    status_code=201,
-)
+@app.post("/clients/register", response_model=ClientResponse, tags=["Authentication"], status_code=201)
 async def register_client(data: ClientRegister, db: Session = Depends(get_db)):
+    # ✅ AJOUT : vérification en premier
+    check_registration_allowed(data.invite_code or "")
+
+    existing = db.query(Client).filter(Client.email == data.email).first()
+    if existing:
+        raise HTTPException(status_code=409, detail="Email already registered.")
+    
     """
     Register a new client and receive a unique API token.
 
@@ -386,8 +393,3 @@ async def dashboard():
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=7860, reload=False)
-
-@app.get("/health")
-def health_check():
-    import os
-    return {"status": "healthy", "port": os.getenv("PORT", "7860")}

@@ -19,7 +19,6 @@
     --critical: #dc2626;
     --text: #e2e8f0;
     --muted: #64748b;
-    --glow: 0 0 40px rgba(59,130,246,0.15);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -74,6 +73,7 @@
     font-size: 0.85rem;
     transition: all 0.2s;
     text-decoration: none;
+    display: inline-block;
   }
   .nav-btn:hover, .nav-btn.active {
     background: var(--surface2);
@@ -117,6 +117,7 @@
     box-shadow: 0 0 20px rgba(59,130,246,0.3);
   }
   .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(59,130,246,0.5); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
   .btn-secondary {
     background: var(--surface);
     color: var(--text);
@@ -181,6 +182,7 @@
     transition: all 0.2s;
     font-size: 0.9rem;
     margin-bottom: -1px;
+    user-select: none;
   }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-content { display: none; }
@@ -210,11 +212,15 @@
     transition: border-color 0.2s;
     width: 100%;
   }
+  /* FIX: couleur des options select en dark mode */
+  .form-group select option { background: #1a2235; color: var(--text); }
   .form-group input:focus, .form-group select:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
   }
+  /* FIX: champs invalides visibles */
+  .form-group input.invalid { border-color: var(--danger); }
 
   /* TOKEN INPUT */
   .token-bar {
@@ -226,6 +232,7 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 1rem 1.5rem;
+    flex-wrap: wrap;
   }
   .token-bar label {
     font-size: 0.8rem;
@@ -237,6 +244,7 @@
   }
   .token-bar input {
     flex: 1;
+    min-width: 200px;
     background: var(--bg);
     border: 1px solid var(--border);
     color: var(--accent);
@@ -317,26 +325,31 @@
     color: #93c5fd;
   }
 
-  /* REGISTER MODAL */
+  /* MODAL */
   .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
     z-index: 200;
     align-items: center;
     justify-content: center;
+    padding: 1rem;
   }
   .modal-overlay.open { display: flex; }
+
   .modal {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2.5rem;
-    width: 90%;
+    border-radius: 24px;
+    padding: 2rem;
+    width: 100%;
     max-width: 500px;
     animation: fadeIn 0.3s ease;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
   }
   @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.95); }
@@ -346,31 +359,49 @@
     font-family: 'DM Serif Display', serif;
     font-size: 1.75rem;
     margin-bottom: 0.5rem;
+    margin-top: 0;
+    padding-right: 40px;
   }
-  .modal p { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
-  .modal-form { display: flex; flex-direction: column; gap: 1rem; }
+  .modal > p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
   .close-btn {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
+    top: 14px;
+    right: 14px;
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #fca5a5;
     width: 32px;
     height: 32px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 1rem;
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 20;
+    line-height: 1;
   }
-  .modal { position: relative; }
+  .close-btn:hover {
+    background: rgba(239,68,68,0.3);
+    color: white;
+    transform: scale(1.05);
+  }
 
   /* TOKEN DISPLAY */
   .token-display {
-    background: var(--bg);
-    border: 1px solid var(--success);
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.3);
     border-radius: 10px;
     padding: 1rem;
     margin-top: 1rem;
@@ -441,13 +472,16 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ERROR/SUCCESS */
+  /* ALERTS */
   .alert {
-    padding: 1rem 1.5rem;
+    padding: 0.85rem 1.25rem;
     border-radius: 10px;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     margin-bottom: 1rem;
     display: none;
+    /* FIX: white-space pour afficher les erreurs multi-lignes */
+    white-space: pre-line;
+    line-height: 1.5;
   }
   .alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
   .alert-success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
@@ -470,8 +504,8 @@
   <span class="logo-badge">ML API v1.0</span>
   <div class="spacer"></div>
   <div class="nav-links">
-    <button class="nav-btn active" onclick="showSection('demo')">🔮 Démo</button>
-    <button class="nav-btn" onclick="showSection('docs')">📖 Guide</button>
+    <button class="nav-btn active" onclick="showSection('demo', this)">🔮 Démo</button>
+    <button class="nav-btn" onclick="showSection('docs', this)">📖 Guide</button>
     <a href="/docs" class="nav-btn" target="_blank">⚡ Swagger</a>
   </div>
   <button class="btn-primary" onclick="openModal()" style="padding:0.4rem 1.2rem;font-size:0.85rem">
@@ -495,14 +529,14 @@
   <div id="section-demo" class="section">
     <div class="token-bar">
       <label>🔑 Token API</label>
-      <input type="text" id="global-token" placeholder="churn_xxxxxxxxxxxx..." />
+      <input type="text" id="global-token" placeholder="churn_xxxxxxxxxxxx..." autocomplete="off" />
       <button class="btn-secondary" onclick="loadStats()" style="white-space:nowrap;font-size:0.85rem">Mes stats</button>
     </div>
 
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('predict')">🔮 Prédiction</div>
-      <div class="tab" onclick="switchTab('stats')">📊 Statistiques</div>
-      <div class="tab" onclick="switchTab('history')">📋 Historique</div>
+      <div class="tab active" onclick="switchTab('predict', this)">🔮 Prédiction</div>
+      <div class="tab" onclick="switchTab('stats', this)">📊 Statistiques</div>
+      <div class="tab" onclick="switchTab('history', this)">📋 Historique</div>
     </div>
 
     <!-- PREDICT TAB -->
@@ -518,19 +552,19 @@
           </div>
           <div class="form-group">
             <label>Ancienneté (mois)</label>
-            <input type="number" id="f-tenure"  min="0" max="240" placeholder="8">
+            <input type="number" id="f-tenure" min="0" max="240" placeholder="8">
           </div>
           <div class="form-group">
             <label>Charges mensuelles (Ar)</label>
-            <input type="number" id="f-monthly"  step="0.01" placeholder="89.50">
+            <input type="number" id="f-monthly" step="0.01" placeholder="89.50">
           </div>
           <div class="form-group">
             <label>Charges totales (Ar)</label>
-            <input type="number" id="f-total"  step="0.01" placeholder="716">
+            <input type="number" id="f-total" step="0.01" placeholder="716">
           </div>
           <div class="form-group">
             <label>Nombre de produits</label>
-            <input type="number" id="f-products"  min="1" max="10" placeholder="2">
+            <input type="number" id="f-products" min="1" max="10" placeholder="2">
           </div>
           <div class="form-group">
             <label>Type de contrat</label>
@@ -551,15 +585,15 @@
           </div>
           <div class="form-group">
             <label>Tickets support</label>
-            <input type="number" id="f-tickets"  min="0" max="50" placeholder="5">
+            <input type="number" id="f-tickets" min="0" max="50" placeholder="5">
           </div>
           <div class="form-group">
             <label>Jours sans interaction</label>
-            <input type="number" id="f-days"  min="0" placeholder="45">
+            <input type="number" id="f-days" min="0" placeholder="45">
           </div>
           <div class="form-group">
             <label>Long distance moyen (Ar)</label>
-            <input type="number" id="f-ld"  step="0.1" placeholder="12.5">
+            <input type="number" id="f-ld" step="0.1" placeholder="12.5">
           </div>
           <div class="form-group">
             <label>Internet</label>
@@ -686,7 +720,6 @@
     <div class="card" style="margin-bottom:1.5rem">
       <div class="card-title">🚀 Guide de démarrage rapide</div>
       <p style="color:var(--muted);margin-bottom:1.5rem">Commencez à prédire le churn en 3 étapes simples.</p>
-
       <div style="display:flex;flex-direction:column;gap:1.5rem">
         <div>
           <div style="font-weight:600;margin-bottom:0.5rem;color:#93c5fd">1. Enregistrez-vous pour obtenir votre token</div>
@@ -754,30 +787,34 @@ curl -X POST https://your-api.com/predict \
 </div>
 
 <!-- REGISTER MODAL -->
-<div class="modal-overlay" id="modal">
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
   <div class="modal">
-    <button class="close-btn" onclick="closeModal()">✕</button>
+    <button class="close-btn" onclick="closeModal()" title="Fermer">✕</button>
     <h2>Créer un compte</h2>
     <p>Recevez votre token API unique pour accéder à l'API de prédiction.</p>
     <div class="alert alert-error" id="reg-error"></div>
     <div class="modal-form">
       <div class="form-group">
-        <label>Nom complet </label>
-        <input type="text" id="reg-name" placeholder="Rojo">
+        <label>Nom complet *</label>
+        <input type="text" id="reg-name" placeholder="Rojo" autocomplete="name">
       </div>
       <div class="form-group">
-        <label>Email </label>
-        <input type="email" id="reg-email" placeholder="rojo@company.com">
+        <label>Email *</label>
+        <input type="email" id="reg-email" placeholder="rojo@company.com" autocomplete="email">
       </div>
       <div class="form-group">
         <label>Société</label>
-        <input type="text" id="reg-company" placeholder="Acme Corp">
+        <input type="text" id="reg-company" placeholder="Acme Corp" autocomplete="organization">
+      </div>
+      <div class="form-group">
+    <label>Code d'invitation *</label>
+    <input type="text" id="reg-invite" placeholder="Entrez le code d'invitation...">
       </div>
       <div class="form-group">
         <label>Validité du token (jours)</label>
         <input type="number" id="reg-days" value="365" min="1" max="730">
       </div>
-      <button class="btn-primary" onclick="registerClient()" id="reg-btn">
+      <button class="btn-primary" onclick="registerClient()" id="reg-btn" style="width:100%">
         Créer mon compte →
       </button>
     </div>
@@ -785,7 +822,7 @@ curl -X POST https://your-api.com/predict \
       <div style="font-size:0.8rem;color:var(--success);font-weight:600;margin-bottom:0.5rem">✅ Compte créé ! Voici votre token :</div>
       <div class="token-val" id="token-val"></div>
       <div style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem">⚠️ Conservez ce token précieusement. Il ne sera plus affiché.</div>
-      <button class="btn-secondary copy-btn" onclick="copyToken()">📋 Copier le token</button>
+      <button class="btn-secondary copy-btn" onclick="copyToken(event)">📋 Copier le token</button>
     </div>
   </div>
 </div>
@@ -796,86 +833,154 @@ curl -X POST https://your-api.com/predict \
 </footer>
 
 <script>
-const API_BASE = '';
+/* ─── ÉTAT GLOBAL ──────────────────────────────────────────────────────────── */
 let currentToken = '';
 
 function getToken() {
   return document.getElementById('global-token').value.trim() || currentToken;
 }
 
-function showSection(name) {
+/* ─── NAVIGATION ───────────────────────────────────────────────────────────── */
+// FIX: passer l'élément explicitement au lieu de dépendre de l'objet `event` global
+function showSection(name, btn) {
   document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
   document.getElementById('section-' + name).style.display = 'block';
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
-function switchTab(name) {
+// FIX: passer l'élément explicitement + reset du tab actif proprement
+function switchTab(name, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
+  if (el) el.classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
   if (name === 'stats') loadStats();
   if (name === 'history') loadHistory();
 }
 
+/* ─── MODAL ────────────────────────────────────────────────────────────────── */
 function openModal() {
-  document.getElementById('modal').classList.add('open');
+  const modal = document.getElementById('modal');
+  modal.classList.add('open');
   document.getElementById('token-display').style.display = 'none';
-  document.getElementById('reg-error').style.display = 'none';
+  hideAlert('reg-error');
+  // Reset form
+  document.getElementById('reg-name').value = '';
+  document.getElementById('reg-email').value = '';
+  document.getElementById('reg-company').value = '';
+  document.getElementById('reg-days').value = '365';
+  const btn = document.getElementById('reg-btn');
+  btn.disabled = false;
+  btn.textContent = 'Créer mon compte →';
 }
+
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
 }
 
+// FIX: fermeture en cliquant sur l'overlay (pas sur la modale elle-même)
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+// FIX: fermeture avec la touche Échap
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ─── GESTION DES ERREURS ──────────────────────────────────────────────────── */
+/**
+ * FIX PRINCIPAL : showError gère maintenant tous les formats FastAPI
+ * - string simple → affiché directement
+ * - tableau d'objets [{loc, msg, type}] → messages lisibles (plus de [object Object])
+ * - objet simple → extrait le message
+ */
+function showError(elId, msg) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+
+  if (Array.isArray(msg)) {
+    // Erreurs de validation Pydantic/FastAPI : detail = [{loc:[...], msg:"...", type:"..."}]
+    msg = msg.map(e => {
+      if (typeof e === 'object' && e !== null) {
+        const field = Array.isArray(e.loc)
+          ? e.loc.filter(l => l !== 'body' && l !== 'query').join('.')
+          : '';
+        const message = e.msg || e.message || JSON.stringify(e);
+        return field ? `${field} : ${message}` : message;
+      }
+      return String(e);
+    }).join('\n');
+  } else if (typeof msg === 'object' && msg !== null) {
+    msg = msg.msg || msg.message || msg.detail || JSON.stringify(msg);
+  } else {
+    msg = String(msg || 'Erreur inconnue');
+  }
+
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function hideAlert(elId) {
+  const el = document.getElementById(elId);
+  if (el) el.style.display = 'none';
+}
+
+/* ─── INSCRIPTION ──────────────────────────────────────────────────────────── */
 async function registerClient() {
   const btn = document.getElementById('reg-btn');
-  const name = document.getElementById('reg-name').value;
-  const email = document.getElementById('reg-email').value;
-  const company = document.getElementById('reg-company').value;
-  const days = parseInt(document.getElementById('reg-days').value);
-  const errEl = document.getElementById('reg-error');
-  errEl.style.display = 'none';
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const company = document.getElementById('reg-company').value.trim();
+  const days = parseInt(document.getElementById('reg-days').value) || 365;
+  const invite_code = document.getElementById('reg-invite').value.trim(); // ajoute
 
-  if (!name || !email) { showError(errEl, 'Nom et email requis.'); return; }
+
+  hideAlert('reg-error');
+
+  // Validation côté client
+  if (!name || !email) { showError('reg-error', 'Le nom et l\'email sont requis.'); return; }
+  if (!invite_code) { showError('reg-error', 'Le code d\'invitation est requis.'); return; } // ✅ AJOUT
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('reg-error', 'Adresse email invalide.'); return; }
+
 
   btn.disabled = true;
-  btn.textContent = 'Création...';
+  btn.textContent = 'Création en cours...';
+
   try {
     const res = await fetch('/clients/register', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name, email, company, token_validity_days: days})
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, company, token_validity_days: days, invite_code }) // ✅ AJOUT
     });
     const data = await res.json();
-    if (!res.ok) { showError(errEl, data.detail || 'Erreur lors de l\'inscription.'); return; }
+    if (!res.ok) { showError('reg-error', data.detail || 'Erreur lors de l\'inscription.'); return; }
 
     currentToken = data.api_token;
     document.getElementById('global-token').value = data.api_token;
     document.getElementById('token-val').textContent = data.api_token;
     document.getElementById('token-display').style.display = 'block';
-    btn.textContent = '✅ Compte créé';
-  } catch(e) {
-    showError(errEl, 'Erreur réseau. Vérifiez votre connexion.');
-  } finally {
+    btn.textContent = '✅ Compte créé !';
+  } catch (e) {showError('reg-error', 'Erreur réseau. Vérifiez votre connexion.');
     btn.disabled = false;
-    if (btn.textContent === 'Création...') btn.textContent = 'Créer mon compte →';
+    btn.textContent = 'Créer mon compte →';
   }
 }
 
-function copyToken() {
+// FIX: passer l'event explicitement pour éviter les bugs avec event global
+function copyToken(e) {
   const t = document.getElementById('token-val').textContent;
-  navigator.clipboard.writeText(t);
-  event.target.textContent = '✅ Copié !';
-  setTimeout(() => event.target.textContent = '📋 Copier le token', 2000);
+  navigator.clipboard.writeText(t).then(() => {
+    const btn = e.currentTarget;
+    btn.textContent = '✅ Copié !';
+    setTimeout(() => btn.textContent = '📋 Copier le token', 2000);
+  });
 }
 
-function showError(el, msg) {
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-
+/* ─── FORMULAIRE ───────────────────────────────────────────────────────────── */
 function randomizeForm() {
+  document.getElementById('f-name').value = ['Akomba','Rojo','Hery','Nirina','Tojo'][Math.floor(Math.random()*5)];
   document.getElementById('f-tenure').value = Math.floor(Math.random() * 72);
   document.getElementById('f-monthly').value = (20 + Math.random() * 100).toFixed(2);
   document.getElementById('f-total').value = (100 + Math.random() * 5000).toFixed(2);
@@ -885,31 +990,65 @@ function randomizeForm() {
   document.getElementById('f-ld').value = (Math.random() * 50).toFixed(1);
   document.getElementById('f-contract').value = Math.floor(Math.random() * 3);
   document.getElementById('f-payment').value = Math.floor(Math.random() * 4);
+  // Reset les champs invalides
+  document.querySelectorAll('.form-group input.invalid').forEach(i => i.classList.remove('invalid'));
 }
 
+// FIX: validation des champs numériques avant envoi
+function getNumericFields() {
+  return [
+    { id: 'f-tenure',   key: 'tenure_months',              parse: parseInt   },
+    { id: 'f-monthly',  key: 'monthly_charges',            parse: parseFloat },
+    { id: 'f-total',    key: 'total_charges',              parse: parseFloat },
+    { id: 'f-products', key: 'num_products',               parse: parseInt   },
+    { id: 'f-tickets',  key: 'num_support_tickets',        parse: parseInt   },
+    { id: 'f-days',     key: 'days_since_last_interaction',parse: parseInt   },
+    { id: 'f-ld',       key: 'avg_monthly_long_distance',  parse: parseFloat },
+  ];
+}
+
+/* ─── PRÉDICTION ───────────────────────────────────────────────────────────── */
 async function runPrediction() {
   const token = getToken();
-  const errEl = document.getElementById('pred-error');
-  errEl.style.display = 'none';
-  if (!token) { showError(errEl, 'Veuillez entrer votre token API.'); return; }
+  hideAlert('pred-error');
 
-  const payload = {
-    customer_name: document.getElementById('f-name').value || undefined,
-    tenure_months: parseInt(document.getElementById('f-tenure').value),
-    monthly_charges: parseFloat(document.getElementById('f-monthly').value),
-    total_charges: parseFloat(document.getElementById('f-total').value),
-    num_products: parseInt(document.getElementById('f-products').value),
-    has_internet: document.getElementById('f-internet').value === 'true',
-    has_phone: document.getElementById('f-phone').value === 'true',
-    contract_type: parseInt(document.getElementById('f-contract').value),
-    payment_method: parseInt(document.getElementById('f-payment').value),
-    paperless_billing: document.getElementById('f-paperless').value === 'true',
-    tech_support: document.getElementById('f-techsup').value === 'true',
-    online_security: document.getElementById('f-security').value === 'true',
-    num_support_tickets: parseInt(document.getElementById('f-tickets').value),
-    avg_monthly_long_distance: parseFloat(document.getElementById('f-ld').value),
-    days_since_last_interaction: parseInt(document.getElementById('f-days').value)
-  };
+  if (!token) {
+    showError('pred-error', 'Veuillez entrer votre token API dans le champ en haut.');
+    return;
+  }
+
+  // Validation et construction du payload
+  const numFields = getNumericFields();
+  let hasError = false;
+  const payload = {};
+
+  numFields.forEach(({ id, key, parse }) => {
+    const el = document.getElementById(id);
+    const val = parse(el.value);
+    el.classList.remove('invalid');
+    if (isNaN(val)) {
+      el.classList.add('invalid');
+      hasError = true;
+    } else {
+      payload[key] = val;
+    }
+  });
+
+  if (hasError) {
+    showError('pred-error', 'Veuillez remplir tous les champs numériques surlignés en rouge.');
+    return;
+  }
+
+  const name = document.getElementById('f-name').value.trim();
+  if (name) payload.customer_name = name;
+
+  payload.has_internet    = document.getElementById('f-internet').value === 'true';
+  payload.has_phone       = document.getElementById('f-phone').value === 'true';
+  payload.contract_type   = parseInt(document.getElementById('f-contract').value);
+  payload.payment_method  = parseInt(document.getElementById('f-payment').value);
+  payload.paperless_billing = document.getElementById('f-paperless').value === 'true';
+  payload.tech_support    = document.getElementById('f-techsup').value === 'true';
+  payload.online_security = document.getElementById('f-security').value === 'true';
 
   document.getElementById('pred-loading').style.display = 'block';
   document.getElementById('result-panel').style.display = 'none';
@@ -917,14 +1056,20 @@ async function runPrediction() {
   try {
     const res = await fetch('/predict', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'X-API-Token': token},
+      headers: { 'Content-Type': 'application/json', 'X-API-Token': token },
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-    if (!res.ok) { showError(errEl, data.detail || 'Erreur de prédiction.'); return; }
+
+    if (!res.ok) {
+      // FIX: data.detail peut être un tableau d'objets
+      showError('pred-error', data.detail || 'Erreur de prédiction.');
+      return;
+    }
     displayResult(data);
-  } catch(e) {
-    showError(errEl, 'Erreur réseau.');
+
+  } catch (e) {
+    showError('pred-error', 'Erreur réseau. Vérifiez que l\'API est accessible.');
   } finally {
     document.getElementById('pred-loading').style.display = 'none';
   }
@@ -950,21 +1095,33 @@ function displayResult(data) {
   badge.style.border = `1px solid ${data.risk_color}66`;
   badge.style.color = data.risk_color;
 
-  if (data.customer_name) {
-    document.getElementById('customer-label').textContent = '👤 ' + data.customer_name;
-  }
+  const customerLabel = document.getElementById('customer-label');
+  customerLabel.textContent = data.customer_name ? '👤 ' + data.customer_name : '';
 
   document.getElementById('recommendation').textContent = data.recommendation;
 
   const factorsList = document.getElementById('factors-list');
-  factorsList.innerHTML = data.key_factors.map(f => `<li>${f}</li>`).join('');
+  // FIX: utiliser textContent dans chaque <li> pour éviter XSS
+  factorsList.innerHTML = '';
+  (data.key_factors || []).forEach(f => {
+    const li = document.createElement('li');
+    li.textContent = f;
+    factorsList.appendChild(li);
+  });
+
+  // Scroll vers le résultat
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+/* ─── STATISTIQUES ─────────────────────────────────────────────────────────── */
 async function loadStats() {
   const token = getToken();
-  const errEl = document.getElementById('stats-error');
-  errEl.style.display = 'none';
-  if (!token) { showError(errEl, 'Veuillez entrer votre token.'); return; }
+  hideAlert('stats-error');
+
+  if (!token) {
+    showError('stats-error', 'Veuillez entrer votre token API.');
+    return;
+  }
 
   document.getElementById('stats-loading').style.display = 'block';
   document.getElementById('stats-content').style.display = 'none';
@@ -972,25 +1129,32 @@ async function loadStats() {
 
   try {
     const res = await fetch('/predictions/stats', {
-      headers: {'X-API-Token': token}
+      headers: { 'X-API-Token': token }
     });
     const data = await res.json();
-    if (!res.ok) { showError(errEl, data.detail || 'Erreur.'); return; }
-    if (data.total === 0) {
+
+    if (!res.ok) {
+      showError('stats-error', data.detail || 'Erreur lors du chargement des stats.');
+      return;
+    }
+
+    // FIX: data.total === 0 ET data.total_predictions peut être absent
+    const total = data.total_predictions || data.total || 0;
+    if (total === 0) {
       document.getElementById('stats-empty').style.display = 'block';
       return;
     }
-    document.getElementById('s-total').textContent = data.total_predictions;
-    document.getElementById('s-churners').textContent = data.total_churners_detected;
-    document.getElementById('s-rate').textContent = data.churn_rate + '%';
+
+    document.getElementById('s-total').textContent = total;
+    document.getElementById('s-churners').textContent = data.total_churners_detected || 0;
+    document.getElementById('s-rate').textContent = (data.churn_rate || 0) + '%';
 
     const bars = document.getElementById('risk-bars');
-    const total = data.total_predictions;
     const levels = [
-      {name: 'Critique', color: '#dc2626', count: data.by_risk_level['Critique']},
-      {name: 'Élevé', color: '#ef4444', count: data.by_risk_level['Élevé']},
-      {name: 'Modéré', color: '#f59e0b', count: data.by_risk_level['Modéré']},
-      {name: 'Faible', color: '#10b981', count: data.by_risk_level['Faible']},
+      { name: 'Critique', color: '#dc2626', count: (data.by_risk_level || {})['Critique'] || 0 },
+      { name: 'Élevé',    color: '#ef4444', count: (data.by_risk_level || {})['Élevé']    || 0 },
+      { name: 'Modéré',   color: '#f59e0b', count: (data.by_risk_level || {})['Modéré']   || 0 },
+      { name: 'Faible',   color: '#10b981', count: (data.by_risk_level || {})['Faible']   || 0 },
     ];
     bars.innerHTML = levels.map(l => `
       <div style="margin-bottom:1rem">
@@ -999,64 +1163,99 @@ async function loadStats() {
           <span style="color:var(--muted)">${l.count} / ${total}</span>
         </div>
         <div style="background:var(--bg);border-radius:99px;height:8px;overflow:hidden">
-          <div style="background:${l.color};width:${total>0?Math.round(l.count/total*100):0}%;height:100%;border-radius:99px;transition:width 0.8s ease"></div>
+          <div style="background:${l.color};width:${total > 0 ? Math.round(l.count / total * 100) : 0}%;height:100%;border-radius:99px;transition:width 0.8s ease"></div>
         </div>
       </div>
     `).join('');
 
     document.getElementById('stats-content').style.display = 'block';
-  } catch(e) {
-    showError(errEl, 'Erreur réseau.');
+
+  } catch (e) {
+    showError('stats-error', 'Erreur réseau.');
   } finally {
     document.getElementById('stats-loading').style.display = 'none';
   }
 }
 
+/* ─── HISTORIQUE ───────────────────────────────────────────────────────────── */
 async function loadHistory() {
   const token = getToken();
-  const errEl = document.getElementById('hist-error');
-  errEl.style.display = 'none';
-  if (!token) { showError(errEl, 'Veuillez entrer votre token.'); return; }
+  hideAlert('hist-error');
+
+  if (!token) {
+    showError('hist-error', 'Veuillez entrer votre token API.');
+    return;
+  }
+
   document.getElementById('hist-loading').style.display = 'block';
   document.getElementById('hist-content').innerHTML = '';
 
   try {
     const res = await fetch('/predictions/history?page_size=20', {
-      headers: {'X-API-Token': token}
+      headers: { 'X-API-Token': token }
     });
     const data = await res.json();
-    if (!res.ok) { showError(errEl, data.detail || 'Erreur.'); return; }
-    if (!data.predictions.length) {
-      document.getElementById('hist-content').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted)">📭 Aucune prédiction encore.</div>';
+
+    if (!res.ok) {
+      showError('hist-error', data.detail || 'Erreur lors du chargement de l\'historique.');
       return;
     }
-    const riskColors = {'Faible':'#10b981','Modéré':'#f59e0b','Élevé':'#ef4444','Critique':'#dc2626'};
+
+    if (!data.predictions || !data.predictions.length) {
+      document.getElementById('hist-content').innerHTML =
+        '<div style="text-align:center;padding:3rem;color:var(--muted)">📭 Aucune prédiction encore.</div>';
+      return;
+    }
+
+    const riskColors = {
+      'Faible':   '#10b981',
+      'Modéré':   '#f59e0b',
+      'Élevé':    '#ef4444',
+      'Critique': '#dc2626'
+    };
+
+    // FIX: échapper le nom client pour éviter XSS via innerHTML
+    const escape = s => String(s || '—').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
     document.getElementById('hist-content').innerHTML = `
-      <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
-        <thead>
-          <tr style="color:var(--muted);border-bottom:1px solid var(--border)">
-            <th style="padding:0.75rem;text-align:left">Client</th>
-            <th style="padding:0.75rem;text-align:center">Probabilité</th>
-            <th style="padding:0.75rem;text-align:center">Risque</th>
-            <th style="padding:0.75rem;text-align:right">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${data.predictions.map(p => `
-          <tr style="border-bottom:1px solid var(--border)">
-            <td style="padding:0.75rem">${p.customer_name || '—'}</td>
-            <td style="padding:0.75rem;text-align:center;font-family:'DM Mono',monospace">${Math.round(p.churn_probability*100)}%</td>
-            <td style="padding:0.75rem;text-align:center">
-              <span style="background:${riskColors[p.risk_level]}22;color:${riskColors[p.risk_level]};padding:0.2rem 0.75rem;border-radius:99px;font-size:0.8rem">${p.risk_level}</span>
-            </td>
-            <td style="padding:0.75rem;text-align:right;color:var(--muted)">${new Date(p.created_at).toLocaleDateString('fr-FR')}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-      <div style="text-align:center;margin-top:1rem;color:var(--muted);font-size:0.85rem">${data.total} prédictions au total</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:500px">
+          <thead>
+            <tr style="color:var(--muted);border-bottom:1px solid var(--border)">
+              <th style="padding:0.75rem;text-align:left">Client</th>
+              <th style="padding:0.75rem;text-align:center">Probabilité</th>
+              <th style="padding:0.75rem;text-align:center">Risque</th>
+              <th style="padding:0.75rem;text-align:right">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.predictions.map(p => {
+              const color = riskColors[p.risk_level] || '#64748b';
+              const date = p.created_at ? new Date(p.created_at).toLocaleDateString('fr-FR') : '—';
+              return `
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:0.75rem">${escape(p.customer_name)}</td>
+                <td style="padding:0.75rem;text-align:center;font-family:'DM Mono',monospace">
+                  ${Math.round((p.churn_probability || 0) * 100)}%
+                </td>
+                <td style="padding:0.75rem;text-align:center">
+                  <span style="background:${color}22;color:${color};padding:0.2rem 0.75rem;border-radius:99px;font-size:0.8rem">
+                    ${escape(p.risk_level)}
+                  </span>
+                </td>
+                <td style="padding:0.75rem;text-align:right;color:var(--muted)">${date}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="text-align:center;margin-top:1rem;color:var(--muted);font-size:0.85rem">
+        ${data.total || data.predictions.length} prédictions au total
+      </div>
     `;
-  } catch(e) {
-    showError(errEl, 'Erreur réseau.');
+
+  } catch (e) {
+    showError('hist-error', 'Erreur réseau.');
   } finally {
     document.getElementById('hist-loading').style.display = 'none';
   }
